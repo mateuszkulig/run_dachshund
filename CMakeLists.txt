@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.15)
+
+project(run_dashund VERSION 0.1)
+
+# path to src folder with .c files and inc folder with .h files
+set(PATH_SRC ${PROJECT_SOURCE_DIR}/src)
+set(PATH_INC ${PROJECT_SOURCE_DIR}/inc)
+
+# EXEC list with all of sources to add by "add_executable" 
+list(APPEND EXEC ${PATH_SRC}/main.c)
+
+# add all executables from EXEC list
+add_executable(run_dashund ${EXEC})
+
+# includes
+target_include_directories(run_dashund PUBLIC ${PATH_INC})

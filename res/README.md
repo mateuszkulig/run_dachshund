@@ -1,0 +1,1 @@
+All of resource files should be in this directory.
