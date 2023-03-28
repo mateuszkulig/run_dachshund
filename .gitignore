@@ -3,6 +3,7 @@
 
 # build directory
 build
+build_mac
 
 # Prerequisites
 *.d

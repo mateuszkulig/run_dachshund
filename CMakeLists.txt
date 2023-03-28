@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.10)
 
 project(run_dashund VERSION 0.1)
 
@@ -9,8 +9,19 @@ set(PATH_INC ${PROJECT_SOURCE_DIR}/inc)
 # EXEC list with all of sources to add by "add_executable" 
 list(APPEND EXEC ${PATH_SRC}/main.c)
 
+if (WIN32)
+    list(APPEND EXEC ${PATH_SRC}/client_win.c)
+else()
+    list(APPEND EXEC ${PATH_SRC}/client_mac.c)
+endif()
+
 # add all executables from EXEC list
 add_executable(run_dashund ${EXEC})
+
+# link winsock
+if (WIN32)
+    target_link_libraries(run_dashund wsock32 ws2_32)
+endif()
 
 # includes
 target_include_directories(run_dashund PUBLIC ${PATH_INC})
