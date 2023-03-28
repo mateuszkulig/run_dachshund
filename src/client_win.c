@@ -17,14 +17,12 @@
 #define DEFAULT_BUFLEN 512
 #define DEFAULT_PORT "8080"
 
-int run() 
-{
+platformSocket clientInit() {
     WSADATA wsaData;
     SOCKET ConnectSocket = INVALID_SOCKET;
     struct addrinfo *result = NULL,
                     *ptr = NULL,
                     hints;
-    const char *sendbuf = "this is a test";
     char recvbuf[DEFAULT_BUFLEN];
     int iResult;
     int recvbuflen = DEFAULT_BUFLEN;
@@ -33,7 +31,7 @@ int run()
     iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
     if (iResult != 0) {
         printf("WSAStartup failed with error: %d\n", iResult);
-        return 1;
+        exit(1);
     }
 
     ZeroMemory( &hints, sizeof(hints) );
@@ -46,7 +44,7 @@ int run()
     if ( iResult != 0 ) {
         printf("getaddrinfo failed with error: %d\n", iResult);
         WSACleanup();
-        return 1;
+        exit(1);
     }
 
     // Attempt to connect to an address until one succeeds
@@ -58,7 +56,7 @@ int run()
         if (ConnectSocket == INVALID_SOCKET) {
             printf("socket failed with error: %ld\n", WSAGetLastError());
             WSACleanup();
-            return 1;
+            exit(1);
         }
 
         // Connect to server.
@@ -76,29 +74,41 @@ int run()
     if (ConnectSocket == INVALID_SOCKET) {
         printf("Unable to connect to server!\n");
         WSACleanup();
-        return 1;
+        exit(1);
     }
+    platformSocket sock;
+    sock.winSocket = ConnectSocket;
 
-    // Send an initial buffer
+    return sock;
+}
+
+void sendData(platformSocket sock, const char *sendbuf) {
+    SOCKET ConnectSocket = sock.winSocket;
+    int iResult;
     iResult = send( ConnectSocket, sendbuf, (int)strlen(sendbuf), 0 );
     if (iResult == SOCKET_ERROR) {
         printf("send failed with error: %d\n", WSAGetLastError());
         closesocket(ConnectSocket);
         WSACleanup();
-        return 1;
+        exit(1);
     }
 
     printf("Bytes Sent: %ld\n", iResult);
+}
 
-    // shutdown the connection since no more data will be sent
+void killSocket(platformSocket sock) {
+    SOCKET ConnectSocket = sock.winSocket;
+    int iResult;
     iResult = shutdown(ConnectSocket, SD_SEND);
     if (iResult == SOCKET_ERROR) {
         printf("shutdown failed with error: %d\n", WSAGetLastError());
         closesocket(ConnectSocket);
         WSACleanup();
-        return 1;
+        exit(1);
     }
 
+    char recvbuf[100];
+    int recvbuflen = 100;
     // Receive until the peer closes the connection
     do {
 
@@ -115,6 +125,13 @@ int run()
     // cleanup
     closesocket(ConnectSocket);
     WSACleanup();
+}
 
+int run() 
+{
+    const char *sendbuf = "this is a test";
+    platformSocket sock = clientInit();
+    sendData(sock, sendbuf);
+    killSocket(sock);
     return 0;
 }
