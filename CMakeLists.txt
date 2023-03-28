@@ -13,7 +13,7 @@ if (WIN32)
     list(APPEND EXEC ${PATH_SRC}/client_win.c)
     list(APPEND EXEC ${PATH_SRC}/server_win.c)
 else()
-    list(APPEND EXEC ${PATH_SRC}/server_mac.c)
+    list(APPEND EXEC ${PATH_SRC}/client_mac.c)
     list(APPEND EXEC ${PATH_SRC}/server_mac.c)
 endif()
 
