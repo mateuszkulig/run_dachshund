@@ -126,11 +126,7 @@ void killSocket(platformSocket sock) {
     WSACleanup();
 }
 
-int run() 
-{
-    const char *sendbuf = "this is a test";
-    platformSocket sock = clientInit();
-    sendData(sock, sendbuf);
-    killSocket(sock);
+int run() {
+    // debug code
     return 0;
 }

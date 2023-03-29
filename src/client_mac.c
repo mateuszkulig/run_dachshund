@@ -53,9 +53,6 @@ void killSocket(platformSocket sock) {
 
 int run()
 {
-    const char *sendbuf = "this is a test";
-    platformSocket sock = clientInit();
-    sendData(sock, sendbuf);
-    killSocket(sock);
+    // debug code
     return 0;
 }
