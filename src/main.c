@@ -11,9 +11,16 @@ int main(int argc, char **argv) {
     switch (buffer) {
         case 'c':
             {
-                const char *sendbuf = "this is a test";
+                char *sendbuf = malloc(16);
+                sendbuf = "this is a test!";
                 platformSocket sock = clientInit();
-                sendData(sock, sendbuf);
+                while (1) {
+                    printf("sending data...\n");
+                    sendData(sock, sendbuf);
+                    printf("press enter to send more data");
+                    getchar();
+                }
+                
                 killSocket(sock);
                 break;
             }
