@@ -15,7 +15,6 @@
 
 
 #define DEFAULT_BUFLEN 512
-#define DEFAULT_PORT "8080"
 
 platformSocket clientInit() {
     WSADATA wsaData;
@@ -26,6 +25,7 @@ platformSocket clientInit() {
     char recvbuf[DEFAULT_BUFLEN];
     int iResult;
     int recvbuflen = DEFAULT_BUFLEN;
+    platformSocket sock;
 
     // Initialize Winsock
     iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
@@ -40,7 +40,7 @@ platformSocket clientInit() {
     hints.ai_protocol = IPPROTO_TCP;
 
     // Resolve the server address and port
-    iResult = getaddrinfo(LOCALHOST, DEFAULT_PORT, &hints, &result);
+    iResult = getaddrinfo(LOCALHOST, PORT, &hints, &result);
     if ( iResult != 0 ) {
         printf("getaddrinfo failed with error: %d\n", iResult);
         WSACleanup();
@@ -76,7 +76,6 @@ platformSocket clientInit() {
         WSACleanup();
         exit(1);
     }
-    platformSocket sock;
     sock.winSocket = ConnectSocket;
 
     return sock;

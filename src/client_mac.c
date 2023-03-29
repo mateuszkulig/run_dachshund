@@ -9,14 +9,12 @@
 
 #include "client.h"
 
-#define PORT 8080
 #define SA struct sockaddr
 
-int run()
-{
+platformSocket clientInit() {
     int sockfd, connfd;
     struct sockaddr_in servaddr, cli;
-    const char *sendbuf = "this is a test\0";
+    platformSocket sock;
  
     // socket create and verification
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -40,12 +38,24 @@ int run()
     }
     else
         printf("connected to the server..\n");
- 
-    // function for chat
+    
+    sock.macSocket = sockfd;
+    return sock;
+}
 
+void sendData(platformSocket sock, const char *sendbuf) {
+    write(sock.macSocket, sendbuf, (int)strlen(sendbuf));
+}
 
-    write(sockfd, sendbuf, (int)strlen(sendbuf));
- 
-    // close the socket
-    close(sockfd);
+void killSocket(platformSocket sock) {
+    close(sock.macSocket);
+}
+
+int run()
+{
+    const char *sendbuf = "this is a test";
+    platformSocket sock = clientInit();
+    sendData(sock, sendbuf);
+    killSocket(sock);
+    return 0;
 }

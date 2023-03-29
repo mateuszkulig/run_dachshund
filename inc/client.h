@@ -1,9 +1,13 @@
 #ifdef _WIN32
     #include "WinSock2.h"
+    // windows and mac have needs diffrent types of PORT
+    #define PORT "8080"
 #else
     #define SOCKET struct SOCKET {}
+    #define PORT 8080
 #endif
-#define LOCALHOST "127.0.0.1"
+#define LOCALHOST   "127.0.0.1"
+
 
 typedef struct platformSocket {
     SOCKET  winSocket;
