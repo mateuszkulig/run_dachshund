@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.10)
 
 project(run_dashund VERSION 0.1)
 
+add_subdirectory(SDL)
+
 # path to src folder with .c files and inc folder with .h files
 set(PATH_SRC ${PROJECT_SOURCE_DIR}/src)
 set(PATH_INC ${PROJECT_SOURCE_DIR}/inc)
@@ -17,6 +19,8 @@ else()
     list(APPEND EXEC ${PATH_SRC}/server_mac.c)
 endif()
 
+list(APPEND EXEC ${PATH_SRC}/engine.c)
+
 # add all executables from EXEC list
 add_executable(run_dashund ${EXEC})
 
@@ -24,6 +28,9 @@ add_executable(run_dashund ${EXEC})
 if (WIN32)
     target_link_libraries(run_dashund wsock32 ws2_32)
 endif()
+
+# link SDL
+target_link_libraries(SDL2)
 
 # includes
 target_include_directories(run_dashund PUBLIC ${PATH_INC})
