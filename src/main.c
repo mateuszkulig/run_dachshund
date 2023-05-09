@@ -1,5 +1,7 @@
 #include "stdio.h"
+#include "stdlib.h"
 #include "client.h"
+#include "server.h"
 
 int main(int argc, char **argv) {
     char buffer;
@@ -14,11 +16,9 @@ int main(int argc, char **argv) {
                 char *sendbuf = malloc(16);
                 sendbuf = "this is a test!";
                 platformSocket sock = clientInit();
-                while (1) {
+                while (getchar() != 'q') {  // getchar takes enter from previous one
                     printf("sending data...\n");
                     sendData(sock, sendbuf);
-                    printf("press enter to send more data");
-                    getchar();
                 }
                 
                 killSocket(sock);
@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
             }
         case 's':
             {   
-                // launch server
+                run_server();
                 break;
             }
     }
