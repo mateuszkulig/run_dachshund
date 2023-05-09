@@ -3,10 +3,9 @@
 #include "client.h"
 #include "server.h"
 
-int main(int argc, char **argv) {
+void clientServerTest() {
     char buffer;
 
-    printf("hello dachshund!\n");
     printf("please type entity to launch[(c)lient/(s)erver]: ");
     scanf("%c", &buffer);
     printf("your choice is %s\n", buffer == 'c' ? "client" : "server");
@@ -30,6 +29,13 @@ int main(int argc, char **argv) {
                 break;
             }
     }
+}
+
+int main(int argc, char **argv) {
+    
+    clientServerTest();
+    printf("hello dachshund!\n");
+    
 
     return 0;
 }
