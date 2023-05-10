@@ -125,7 +125,7 @@ void gameLoop() {
         move(state.players[0], (-moves.u + moves.d) * MOVE_SPEED, (-moves.l + moves.r) * MOVE_SPEED);
 
         // draw background
-        SDL_SetRenderDrawColor(window->renderer, 0, 0, 255, SDL_ALPHA_OPAQUE);
+        SDL_SetRenderDrawColor(window->renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderFillRect(window->renderer, window->background);
 
         // draw players
