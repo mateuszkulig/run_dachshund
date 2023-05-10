@@ -21,6 +21,13 @@ typedef struct gameData {
     playerData  *players[PLAYER_COUNT];
 } gameData;
 
+typedef struct moveData {
+    int u;
+    int d;
+    int l;
+    int r;
+} moveData;
+
 // create the window and renderer
 windowData *createWindow();
 
@@ -29,3 +36,9 @@ void gameLoop();
 
 // init a player
 playerData *addPlayer(int t, int b, int r, int l, SDL_Rect *img);
+
+// move a player
+void move(playerData *player, int du, int rl);
+
+// control the keys and set according data in moveData
+void keyControl(moveData *moves, SDL_Event event);

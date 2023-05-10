@@ -33,12 +33,59 @@ playerData *addPlayer(int t, int l, int b, int r, SDL_Rect *img) {
     return player;
 }
 
+void move(playerData *player, int du, int rl) {
+    player->bottom += du;
+    player->top += du;
+    player->left += rl;
+    player->right += rl;
+
+    player->image->x += rl;
+    player->image->y += du;
+    
+}
+
+void keyControl(moveData *moves, SDL_Event event) {
+    // ifs instead of else if are intentional 
+    if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_LEFT) {    
+        moves->l = 1;
+    }
+    if (event.type == SDL_KEYUP && event.key.keysym.scancode == SDL_SCANCODE_LEFT) {    
+        moves->l = 0;
+    }
+
+    if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_RIGHT) {    
+        moves->r = 1;
+    }
+    if (event.type == SDL_KEYUP && event.key.keysym.scancode == SDL_SCANCODE_RIGHT) {    
+        moves->r = 0;
+    }
+
+    if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_UP) {    
+        moves->u = 1;
+    }
+    if (event.type == SDL_KEYUP && event.key.keysym.scancode == SDL_SCANCODE_UP) {    
+        moves->u = 0;
+    }
+
+    if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_DOWN) {    
+        moves->d = 1;
+    }
+    if (event.type == SDL_KEYUP && event.key.keysym.scancode == SDL_SCANCODE_DOWN) {    
+        moves->d = 0;
+    }
+}
+
 void gameLoop() {
     int         quit = 0;
     SDL_Event   event;
 
     windowData  *window = createWindow();
     gameData    state;
+    moveData    moves;
+    moves.d = 0;
+    moves.u = 0;
+    moves.r = 0;
+    moves.l = 0;
 
     SDL_Rect    rectP1, rectP2;
 
@@ -60,9 +107,13 @@ void gameLoop() {
         while(SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
                 quit = 1;
+                break;
             }
+            keyControl(&moves, event);
         }
-        
+
+        move(state.players[0], -moves.u + moves.d, -moves.l + moves.r);
+
         // draw background
         SDL_SetRenderDrawColor(window->renderer, 0, 0, 255, SDL_ALPHA_OPAQUE);
         SDL_RenderFillRect(window->renderer, window->background);
