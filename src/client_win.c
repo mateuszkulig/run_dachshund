@@ -95,6 +95,20 @@ void sendData(platformSocket sock, const char *sendbuf) {
     printf("Bytes Sent: %ld\n", iResult);
 }
 
+void recvData(platformSocket sock) {
+    SOCKET ConnectSocket = sock.winSocket;
+    int iResult;
+    char *recvbuf = calloc(128, 1);
+
+    iResult = recv(ConnectSocket, recvbuf, 128, 0);
+    if ( iResult > 0 )
+        printf("Bytes received: %d\n", iResult);
+    else if ( iResult == 0 )
+        printf("Connection closed\n");
+    else
+        printf("recv failed with error: %d\n", WSAGetLastError());
+}
+
 void killSocket(platformSocket sock) {
     SOCKET ConnectSocket = sock.winSocket;
     int iResult;
@@ -105,25 +119,6 @@ void killSocket(platformSocket sock) {
         WSACleanup();
         exit(1);
     }
-
-    char recvbuf[100];
-    int recvbuflen = 100;
-    // Receive until the peer closes the connection
-    do {
-
-        iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
-        if ( iResult > 0 )
-            printf("Bytes received: %d\n", iResult);
-        else if ( iResult == 0 )
-            printf("Connection closed\n");
-        else
-            printf("recv failed with error: %d\n", WSAGetLastError());
-
-    } while( iResult > 0 );
-
-    // cleanup
-    closesocket(ConnectSocket);
-    WSACleanup();
 }
 
 int run() {

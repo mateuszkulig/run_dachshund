@@ -22,6 +22,8 @@ void clientServerTest() {
                 while (getchar() != 'q') {  // getchar takes enter from previous one
                     printf("sending data...\n");
                     sendData(sock, sendbuf);
+                    printf("recieving data...\n");
+                    recvData(sock);
                 }
                 
                 killSocket(sock);
@@ -37,8 +39,8 @@ void clientServerTest() {
 
 int main(int argc, char **argv) {
     printf("hello dachshund!\n");
-    // clientServerTest();
-    gameLoop();
+    clientServerTest();
+    // gameLoop();
 
 
     
