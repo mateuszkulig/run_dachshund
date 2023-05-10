@@ -38,7 +38,7 @@ void clientServerTest() {
 int main(int argc, char **argv) {
     printf("hello dachshund!\n");
     // clientServerTest();
-    createWindow();
+    gameLoop();
 
 
     

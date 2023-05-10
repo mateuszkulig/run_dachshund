@@ -15,3 +15,23 @@ windowData *createWindow() {
 
     return result;
 }
+
+void gameLoop() {
+    int         quit = 0;
+    SDL_Event   event;
+
+    windowData  *window = createWindow();
+    gameData    state;
+
+    
+    
+
+    while (!quit) {
+        while(SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) {
+                quit = 1;
+            }
+        }
+        
+    }
+}
