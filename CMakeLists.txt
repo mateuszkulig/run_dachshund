@@ -11,6 +11,7 @@ set(PATH_INC ${PROJECT_SOURCE_DIR}/inc)
 # EXEC list with all of sources to add by "add_executable" 
 list(APPEND EXEC ${PATH_SRC}/main.c)
 list(APPEND EXEC ${PATH_SRC}/encoder_decoder.c)
+list(APPEND EXEC ${PATH_SRC}/engine.c)
 
 if (WIN32)
     list(APPEND EXEC ${PATH_SRC}/client_win.c)
@@ -20,7 +21,7 @@ else()
     list(APPEND EXEC ${PATH_SRC}/server_mac.c)
 endif()
 
-list(APPEND EXEC ${PATH_SRC}/engine.c)
+
 
 # add all executables from EXEC list
 add_executable(run_dachshund ${EXEC})
