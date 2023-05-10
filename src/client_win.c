@@ -15,7 +15,6 @@
 
 
 #define DEFAULT_BUFLEN 512
-#define DEFAULT_PORT "8080"
 
 platformSocket clientInit() {
     WSADATA wsaData;
@@ -26,6 +25,7 @@ platformSocket clientInit() {
     char recvbuf[DEFAULT_BUFLEN];
     int iResult;
     int recvbuflen = DEFAULT_BUFLEN;
+    platformSocket sock;
 
     // Initialize Winsock
     iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
@@ -40,7 +40,7 @@ platformSocket clientInit() {
     hints.ai_protocol = IPPROTO_TCP;
 
     // Resolve the server address and port
-    iResult = getaddrinfo(LOCALHOST, DEFAULT_PORT, &hints, &result);
+    iResult = getaddrinfo(LOCALHOST, PORT, &hints, &result);
     if ( iResult != 0 ) {
         printf("getaddrinfo failed with error: %d\n", iResult);
         WSACleanup();
@@ -76,7 +76,6 @@ platformSocket clientInit() {
         WSACleanup();
         exit(1);
     }
-    platformSocket sock;
     sock.winSocket = ConnectSocket;
 
     return sock;
@@ -96,6 +95,22 @@ void sendData(platformSocket sock, const char *sendbuf) {
     printf("Bytes Sent: %ld\n", iResult);
 }
 
+char *recvData(platformSocket sock) {
+    SOCKET ConnectSocket = sock.winSocket;
+    int iResult;
+    char *recvbuf = calloc(DEFAULT_BUFLEN, 1);
+
+    iResult = recv(ConnectSocket, recvbuf, DEFAULT_BUFLEN, 0);
+    if ( iResult > 0 )
+        printf("Bytes received: %d\n", iResult);
+    else if ( iResult == 0 )
+        printf("Connection closed\n");
+    else
+        printf("recv failed with error: %d\n", WSAGetLastError());
+
+    return recvbuf;
+}
+
 void killSocket(platformSocket sock) {
     SOCKET ConnectSocket = sock.winSocket;
     int iResult;
@@ -106,32 +121,9 @@ void killSocket(platformSocket sock) {
         WSACleanup();
         exit(1);
     }
-
-    char recvbuf[100];
-    int recvbuflen = 100;
-    // Receive until the peer closes the connection
-    do {
-
-        iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
-        if ( iResult > 0 )
-            printf("Bytes received: %d\n", iResult);
-        else if ( iResult == 0 )
-            printf("Connection closed\n");
-        else
-            printf("recv failed with error: %d\n", WSAGetLastError());
-
-    } while( iResult > 0 );
-
-    // cleanup
-    closesocket(ConnectSocket);
-    WSACleanup();
 }
 
-int run() 
-{
-    const char *sendbuf = "this is a test";
-    platformSocket sock = clientInit();
-    sendData(sock, sendbuf);
-    killSocket(sock);
+int run() {
+    // debug code
     return 0;
 }
