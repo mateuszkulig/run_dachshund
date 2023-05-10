@@ -95,7 +95,7 @@ void sendData(platformSocket sock, const char *sendbuf) {
     printf("Bytes Sent: %ld\n", iResult);
 }
 
-void recvData(platformSocket sock) {
+char *recvData(platformSocket sock) {
     SOCKET ConnectSocket = sock.winSocket;
     int iResult;
     char *recvbuf = calloc(DEFAULT_BUFLEN, 1);
@@ -107,6 +107,8 @@ void recvData(platformSocket sock) {
         printf("Connection closed\n");
     else
         printf("recv failed with error: %d\n", WSAGetLastError());
+
+    return recvbuf;
 }
 
 void killSocket(platformSocket sock) {

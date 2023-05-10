@@ -26,7 +26,7 @@ platformSocket clientInit();
 void sendData(platformSocket sock, const char *sendbuf);
 
 // get data from socket
-void recvData(platformSocket sock);
+char *recvData(platformSocket sock);
 
 // socket shutdown and freeup
 void killSocket(platformSocket sock);
