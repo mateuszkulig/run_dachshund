@@ -76,4 +76,6 @@ void decode(playerData *player, char *code) {
     player->right = atoi(bufferRight);
     player->image->x = atoi(bufferImgX);
     player->image->y = atoi(bufferImgY);
+
+    free(code);
 }

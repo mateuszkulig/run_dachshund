@@ -85,7 +85,9 @@ void gameLoop(int playerNumber) {
     windowData  *window = createWindow();
     gameData    state;
     moveData    moves;
-    playerData  *currentPlayer;
+    playerData  *currentPlayer = NULL;
+    playerData  *otherPlayer = NULL;
+
 
     moves.d = 0;
     moves.u = 0;
@@ -106,18 +108,33 @@ void gameLoop(int playerNumber) {
 
     state.players[0] = addPlayer(200, 400, 100, 200, &rectP1);
     state.players[1] = addPlayer(500, 400, 100, 600, &rectP2);
-    
     currentPlayer = state.players[playerNumber];
-    int socketCycle = playerNumber ? 1 : 0;
+    otherPlayer = state.players[!playerNumber];
 
+    int socketCycle = playerNumber ? 1 : 0;
+    platformSocket sock;
+    socketCycle ? (sock = clientInit()) : (sock = serverInit());
+    char *socketBuffer = NULL;
 
     while (!quit) {
+        // events
         while(SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
                 quit = 1;
                 break;
             }
             keyControl(&moves, event);
+        }
+
+        // client-server communication
+        if (socketCycle) {
+            socketBuffer = encode(currentPlayer);
+            sendData(sock, socketBuffer);
+            socketCycle = !socketCycle;
+        } else {
+            socketBuffer = recvData(sock);
+            decode(otherPlayer, socketBuffer);
+            socketCycle = !socketCycle;
         }
 
         // framerate limit
