@@ -5,4 +5,10 @@
     #define PORT 8080
 #endif
 
-int run_server();
+#define DEFAULT_BUFLEN 512
+
+#pragma once
+#include "client.h"
+
+// initialize server and connect to client socket
+platformSocket serverInit();

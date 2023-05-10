@@ -98,9 +98,9 @@ void sendData(platformSocket sock, const char *sendbuf) {
 void recvData(platformSocket sock) {
     SOCKET ConnectSocket = sock.winSocket;
     int iResult;
-    char *recvbuf = calloc(128, 1);
+    char *recvbuf = calloc(DEFAULT_BUFLEN, 1);
 
-    iResult = recv(ConnectSocket, recvbuf, 128, 0);
+    iResult = recv(ConnectSocket, recvbuf, DEFAULT_BUFLEN, 0);
     if ( iResult > 0 )
         printf("Bytes received: %d\n", iResult);
     else if ( iResult == 0 )

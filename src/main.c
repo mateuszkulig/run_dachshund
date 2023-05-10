@@ -16,7 +16,7 @@ void clientServerTest() {
     switch (buffer) {
         case 'c':
             {
-                char *sendbuf = malloc(16);
+                char *sendbuf = malloc(DEFAULT_BUFLEN);
                 sendbuf = "this is a test!";
                 platformSocket sock = clientInit();
                 while (getchar() != 'q') {  // getchar takes enter from previous one
@@ -31,7 +31,16 @@ void clientServerTest() {
             }
         case 's':
             {   
-                run_server();
+                char *sendbuf = malloc(DEFAULT_BUFLEN);
+                sendbuf = "this is a test!";
+                platformSocket sock = serverInit();
+                while (getchar() != 'q') {  // getchar takes enter from previous one
+                    printf("recieving data...\n");
+                    recvData(sock);
+                    printf("sending data...\n");
+                    sendData(sock, sendbuf);
+                }
+                killSocket(sock);
                 break;
             }
     }
