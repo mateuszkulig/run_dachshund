@@ -75,7 +75,7 @@ void keyControl(moveData *moves, SDL_Event event) {
     }
 }
 
-void gameLoop() {
+void gameLoop(int playerNumber) {
     int         quit = 0;
     SDL_Event   event;
     unsigned int lastTicks = SDL_GetTicks();

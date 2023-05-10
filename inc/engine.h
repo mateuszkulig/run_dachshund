@@ -33,7 +33,7 @@ typedef struct moveData {
 windowData *createWindow();
 
 // main game loop
-void gameLoop();
+void gameLoop(int playerNumber);
 
 // init a player
 playerData *addPlayer(int t, int b, int r, int l, SDL_Rect *img);
