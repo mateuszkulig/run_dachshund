@@ -10,6 +10,7 @@ set(PATH_INC ${PROJECT_SOURCE_DIR}/inc)
 
 # EXEC list with all of sources to add by "add_executable" 
 list(APPEND EXEC ${PATH_SRC}/main.c)
+list(APPEND EXEC ${PATH_SRC}/encoder_decoder.c)
 
 if (WIN32)
     list(APPEND EXEC ${PATH_SRC}/client_win.c)

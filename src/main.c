@@ -6,6 +6,7 @@
 #include "client.h"
 #include "server.h"
 #include "engine.h"
+#include "encoder_decoder.h"
 
 void clientServerTest() {
     char buffer;
@@ -48,25 +49,8 @@ void clientServerTest() {
 
 int main(int argc, char **argv) {
     printf("hello dachshund!\n");
-    // clientServerTest();
-    
-    char buffer;
-
-    printf("please type entity to launch[(c)lient/(s)erver]: ");
-    scanf("%c", &buffer);
-    printf("your choice is %s\n", buffer == 'c' ? "client" : "server");
-    switch (buffer) {
-        case 'c':
-            {
-                gameLoop(1);
-                break;
-            }
-        case 's':
-            {   
-                gameLoop(0);
-                break;
-            }
-    }
+    clientServerTest();
+    // gameLoop();
 
 
     
