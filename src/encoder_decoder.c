@@ -21,7 +21,6 @@ char *zeroFill(int number) {
 
 char *encode(playerData *player) {
     char    *result = calloc(DEFAULT_BUFLEN, 1);
-    int     count = 0;
     char    *bufferTop, *bufferLeft, *bufferBottom, *bufferRight, *bufferImgX, *bufferImgY;
     
     bufferTop = zeroFill(player->top);
@@ -51,4 +50,30 @@ char *encode(playerData *player) {
     
 
     return result;
+}
+
+void decode(playerData *player, char *code) {
+    char    bufferTop[4], bufferLeft[4], bufferBottom[4], bufferRight[4], bufferImgX[4], bufferImgY[4];
+    bufferTop[3] = '\0';
+    bufferLeft[3] = '\0';
+    bufferBottom[3] = '\0';
+    bufferRight[3] = '\0';
+    bufferImgX[3] = '\0';
+    bufferImgY[3] = '\0';
+
+    for(size_t i=0; i<3; ++i) {
+        bufferTop[i] = code[i];
+        bufferLeft[i] = code[i+3];
+        bufferBottom[i] = code[i+6];
+        bufferRight[i] = code[i+9];
+        bufferImgX[i] = code[i+12];
+        bufferImgY[i] = code[i+15];
+    }
+
+    player->top = atoi(bufferTop);
+    player->left = atoi(bufferLeft);
+    player->bottom = atoi(bufferBottom);
+    player->right = atoi(bufferRight);
+    player->image->x = atoi(bufferImgX);
+    player->image->y = atoi(bufferImgY);
 }

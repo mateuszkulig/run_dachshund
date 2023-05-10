@@ -11,3 +11,5 @@ char *zeroFill(int number);
 // encode player data into string
 char *encode(playerData *player);
 
+// set up player with decoded data
+void decode(playerData *player, char *code);
