@@ -1,7 +1,11 @@
 #include "stdio.h"
 #include "stdlib.h"
+
+#define SDL_MAIN_HANDLED    // SDL acting up
+
 #include "client.h"
 #include "server.h"
+#include "engine.h"
 
 void clientServerTest() {
     char buffer;
@@ -32,9 +36,12 @@ void clientServerTest() {
 }
 
 int main(int argc, char **argv) {
-    
-    clientServerTest();
     printf("hello dachshund!\n");
+    // clientServerTest();
+    createWindow();
+
+
+    
     
 
     return 0;
