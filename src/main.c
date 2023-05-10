@@ -6,6 +6,7 @@
 #include "client.h"
 #include "server.h"
 #include "engine.h"
+#include "encoder_decoder.h"
 
 void clientServerTest() {
     char buffer;
@@ -48,10 +49,8 @@ void clientServerTest() {
 
 int main(int argc, char **argv) {
     printf("hello dachshund!\n");
-    clientServerTest();
-    // gameLoop();
-
-
+    // clientServerTest();
+    gameLoop(0);
     
     
 

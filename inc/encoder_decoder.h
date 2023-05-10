@@ -1,15 +1,14 @@
-// stworz funkcje ktora bedzie zamieniala strukture webPlayerInfo na stringa i vice versa
-// w tym pliku nic nie zmieniasz, piszesz tylko w pliku encoder_decoder.c w folderze src
-// w mainie mozesz sobie printowac poszczegolne rzeczy zeby sprawdzic czy dziala
-// pisz do mnie jak cokolwiek nie bedziesz wiedziala
-// kocham cie
+#pragma once
+#include "stdio.h"
+#include "stdlib.h"
+#include "engine.h"
+#include "server.h"
 
-typedef struct webPlayerInfo {
-    int posX;
-    int posY;
-    int shot;   // 1 albo 0, tak jak boolean
-} webPlayerInfo;
 
-webPlayerInfo *decode(char *info);
 
-char *encode(webPlayerInfo info);
+// create 3 byte char from up to 3 digits number
+char *zeroFill(int number);
+
+// encode player data into string
+char *encode(playerData player);
+
