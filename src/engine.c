@@ -85,6 +85,8 @@ void gameLoop(int playerNumber) {
     windowData  *window = createWindow();
     gameData    state;
     moveData    moves;
+    playerData  *currentPlayer;
+
     moves.d = 0;
     moves.u = 0;
     moves.r = 0;
@@ -105,6 +107,9 @@ void gameLoop(int playerNumber) {
     state.players[0] = addPlayer(200, 400, 100, 200, &rectP1);
     state.players[1] = addPlayer(500, 400, 100, 600, &rectP2);
     
+    currentPlayer = state.players[playerNumber];
+    int socketCycle = playerNumber ? 1 : 0;
+
 
     while (!quit) {
         while(SDL_PollEvent(&event)) {
@@ -123,7 +128,7 @@ void gameLoop(int playerNumber) {
             continue;
         }
 
-        move(state.players[0], (-moves.u + moves.d) * MOVE_SPEED, (-moves.l + moves.r) * MOVE_SPEED);
+        move(currentPlayer, (-moves.u + moves.d) * MOVE_SPEED, (-moves.l + moves.r) * MOVE_SPEED);
 
         // draw background
         SDL_SetRenderDrawColor(window->renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
