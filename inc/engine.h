@@ -3,6 +3,7 @@
 #define DEFAULT_WINDOW_WIDTH    800
 #define DEFAULT_WINDOW_HEIGHT   600
 #define PLAYER_COUNT            2
+#define MOVE_SPEED              3
 
 // container for SDL stuff
 typedef struct windowData {

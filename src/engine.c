@@ -78,6 +78,8 @@ void keyControl(moveData *moves, SDL_Event event) {
 void gameLoop() {
     int         quit = 0;
     SDL_Event   event;
+    unsigned int lastTicks = SDL_GetTicks();
+    unsigned int currentTicks = SDL_GetTicks();
 
     windowData  *window = createWindow();
     gameData    state;
@@ -112,7 +114,15 @@ void gameLoop() {
             keyControl(&moves, event);
         }
 
-        move(state.players[0], -moves.u + moves.d, -moves.l + moves.r);
+        // framerate limit
+        currentTicks = SDL_GetTicks();
+        if (currentTicks - lastTicks > 1000/60) {
+            lastTicks = currentTicks;
+        } else {
+            continue;
+        }
+
+        move(state.players[0], (-moves.u + moves.d) * MOVE_SPEED, (-moves.l + moves.r) * MOVE_SPEED);
 
         // draw background
         SDL_SetRenderDrawColor(window->renderer, 0, 0, 255, SDL_ALPHA_OPAQUE);
@@ -125,5 +135,6 @@ void gameLoop() {
         }
 
         SDL_RenderPresent(window->renderer);
+        
     }
 }
