@@ -1,5 +1,5 @@
 #include "SDL.h"
-
+#pragma once 
 #define DEFAULT_WINDOW_WIDTH    800
 #define DEFAULT_WINDOW_HEIGHT   600
 #define PLAYER_COUNT            2

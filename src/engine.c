@@ -1,4 +1,5 @@
 #include "engine.h"
+#include "encoder_decoder.h"
 
 windowData *createWindow() {
     windowData *result = malloc(sizeof(windowData));
@@ -135,6 +136,6 @@ void gameLoop() {
         }
 
         SDL_RenderPresent(window->renderer);
-        
     }
+    
 }

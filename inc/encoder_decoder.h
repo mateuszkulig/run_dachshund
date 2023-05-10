@@ -1,4 +1,3 @@
-#pragma once
 #include "stdio.h"
 #include "stdlib.h"
 #include "engine.h"
@@ -10,5 +9,5 @@
 char *zeroFill(int number);
 
 // encode player data into string
-char *encode(playerData player);
+char *encode(playerData *player);
 

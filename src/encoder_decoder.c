@@ -19,17 +19,17 @@ char *zeroFill(int number) {
     return result;
 }
 
-char *encode(playerData player) {
+char *encode(playerData *player) {
     char    *result = calloc(DEFAULT_BUFLEN, 1);
     int     count = 0;
     char    *bufferTop, *bufferLeft, *bufferBottom, *bufferRight, *bufferImgX, *bufferImgY;
     
-    bufferTop = zeroFill(player.top);
-    bufferLeft = zeroFill(player.left);
-    bufferBottom = zeroFill(player.bottom);
-    bufferRight = zeroFill(player.right);
-    bufferImgX = zeroFill(player.image->x);
-    bufferImgY = zeroFill(player.image->y);
+    bufferTop = zeroFill(player->top);
+    bufferLeft = zeroFill(player->left);
+    bufferBottom = zeroFill(player->bottom);
+    bufferRight = zeroFill(player->right);
+    bufferImgX = zeroFill(player->image->x);
+    bufferImgY = zeroFill(player->image->y);
 
     for(size_t i=0; i<3; ++i) {
         result[i] = bufferTop[i];
