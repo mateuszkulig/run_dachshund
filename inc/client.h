@@ -6,7 +6,7 @@
     #define SOCKET struct SOCKET {}
     #define PORT 27015
 #endif
-#define LOCALHOST   "127.0.0.1"
+#define LOCALHOST   "192.168.1.117"
 
 #pragma once
 #define DEFAULT_BUFLEN 512
