@@ -136,8 +136,8 @@ void gameLoop(int playerNumber) {
     rectP2.w = 100;
     rectP2.h = 100;
 
-    state.players[0] = addPlayer(200, 400, 100, 200, &rectP1);
-    state.players[1] = addPlayer(500, 400, 100, 600, &rectP2);
+    state.players[0] = addPlayer(400, 200, 500, 300, &rectP1);
+    state.players[1] = addPlayer(500, 400, 500, 600, &rectP2);
 
     addPlayerAnimation(window, state.players[0], "res/jamniczek1_1.bmp");
     addPlayerAnimation(window, state.players[1], "res/jamniczek2_1.bmp");
