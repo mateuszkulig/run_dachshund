@@ -12,12 +12,14 @@ typedef struct windowData {
     SDL_Window      *window;
     SDL_Renderer    *renderer;
     SDL_Rect        *background;
+    SDL_Surface     *surface;
 } windowData;
 
 typedef struct playerData {
     int         top, bottom;
     int         right, left;
     SDL_Rect    *image;
+    SDL_Surface *texture;
 } playerData;
 
 typedef struct gameData {
@@ -38,7 +40,7 @@ windowData *createWindow();
 void gameLoop(int playerNumber);
 
 // init a player
-playerData *addPlayer(int t, int b, int r, int l, SDL_Rect *img);
+playerData *addPlayer(int t, int l, int b, int r, SDL_Rect *img, SDL_Surface *texture);
 
 // move a player
 void move(playerData *player, int du, int rl);

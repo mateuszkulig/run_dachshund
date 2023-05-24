@@ -13,6 +13,7 @@ windowData *createWindow() {
         SDL_WINDOW_SHOWN);
     
     result->renderer = SDL_CreateRenderer(result->window, -1, SDL_RENDERER_ACCELERATED);
+    result->surface = SDL_GetWindowSurface(result->window);
 
     result->background = malloc(sizeof(SDL_Rect));
     result->background->x = 0;
@@ -23,13 +24,15 @@ windowData *createWindow() {
     return result;
 }
 
-playerData *addPlayer(int t, int l, int b, int r, SDL_Rect *img) {
+playerData *addPlayer(int t, int l, int b, int r, SDL_Rect *img, SDL_Surface *texture) {
     playerData *player = malloc(sizeof(playerData));
     player->top = t;
     player->bottom = b;
     player->right = r;
     player->left = l;
     player->image = img;
+
+    player->texture = texture;
     
     return player;
 }
@@ -95,6 +98,8 @@ void gameLoop(int playerNumber) {
     moves.l = 0;
 
     SDL_Rect    rectP1, rectP2;
+    SDL_Surface *surfP1 = NULL, *surfP2 = NULL, *textureP1 = NULL, *textureP2 = NULL;
+
 
     rectP1.x = 200;
     rectP1.y = 400;
@@ -106,8 +111,17 @@ void gameLoop(int playerNumber) {
     rectP2.w = 100;
     rectP2.h = 100;
 
-    state.players[0] = addPlayer(200, 400, 100, 200, &rectP1);
-    state.players[1] = addPlayer(500, 400, 100, 600, &rectP2);
+    surfP1 = SDL_LoadBMP("res/player1.bmp");
+    surfP2 = SDL_LoadBMP("res/player2.bmp");
+
+    textureP1 = SDL_ConvertSurfaceFormat(surfP1, SDL_GetWindowPixelFormat(window->window), 0);
+    textureP2 = SDL_ConvertSurfaceFormat(surfP2, SDL_GetWindowPixelFormat(window->window), 0);
+
+    SDL_FreeSurface(surfP1);
+    SDL_FreeSurface(surfP2);
+
+    state.players[0] = addPlayer(200, 400, 100, 200, &rectP1, textureP1);
+    state.players[1] = addPlayer(500, 400, 100, 600, &rectP2, textureP2);
     currentPlayer = state.players[playerNumber];
     otherPlayer = state.players[!playerNumber];
 
@@ -148,16 +162,21 @@ void gameLoop(int playerNumber) {
         move(currentPlayer, (-moves.u + moves.d) * MOVE_SPEED, (-moves.l + moves.r) * MOVE_SPEED);
 
         // draw background
-        SDL_SetRenderDrawColor(window->renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-        SDL_RenderFillRect(window->renderer, window->background);
+        // SDL_SetRenderDrawColor(window->renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+        // SDL_RenderFillRect(window->renderer, window->background);
+
+        // clear screen
+        SDL_FillRect(window->surface, NULL, SDL_MapRGB(window->surface->format, 0, 0, 0));
 
         // draw players
         SDL_SetRenderDrawColor(window->renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
         for (size_t i=0; i<PLAYER_COUNT; ++i) {
-            SDL_RenderFillRect(window->renderer, state.players[i]->image);
+            SDL_BlitSurface(state.players[i]->texture, NULL, window->surface, state.players[i]->image);
+            // SDL_RenderDrawRect(window->renderer, state.players[i]->image);
         }
 
-        SDL_RenderPresent(window->renderer);
+        // SDL_RenderPresent(window->renderer);
+        SDL_UpdateWindowSurface(window->window);
     }
     
 }
