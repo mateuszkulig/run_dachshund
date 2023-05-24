@@ -2,7 +2,8 @@
 #include "encoder_decoder.h"
 
 windowData *createWindow() {
-    windowData *result = malloc(sizeof(windowData));
+    windowData  *result = malloc(sizeof(windowData));
+    SDL_Surface *temp = NULL;
 
     SDL_Init(SDL_INIT_VIDEO);
 
@@ -20,6 +21,20 @@ windowData *createWindow() {
     result->background->y = 0;
     result->background->w = DEFAULT_WINDOW_WIDTH;
     result->background->h = DEFAULT_WINDOW_HEIGHT;
+
+    temp = SDL_LoadBMP("res/bg.bmp");
+    result->bg_texture = SDL_ConvertSurfaceFormat(temp, SDL_GetWindowPixelFormat(result->window), 0);
+    SDL_FreeSurface(temp);
+
+    result->bg_top = malloc(sizeof(SDL_Rect));
+    result->bg_top->x = 0;
+    result->bg_top->y = 0;
+    result->bg_top->w = DEFAULT_WINDOW_WIDTH;
+    result->bg_top->h = TOP_COVER_HEIGHT;
+
+    temp = SDL_LoadBMP("res/bg_up.bmp");
+    result->bg_top_texture = SDL_ConvertSurfaceFormat(temp, SDL_GetWindowPixelFormat(result->window), 0);
+    SDL_FreeSurface(temp);
 
     return result;
 }
@@ -82,7 +97,7 @@ void keyControl(moveData *moves, SDL_Event event) {
 void addPlayerAnimation(windowData *window, playerData *player, char *filename) {
     SDL_Surface *temp;
     temp = SDL_LoadBMP(filename);
-    player->texture[player->animCount] = SDL_ConvertSurfaceFormat(temp, SDL_GetWindowPixelFormat(window->window), 0);
+    player->texture[player->animCount] = SDL_ConvertSurfaceFormat(temp, SDL_PIXELFORMAT_ARGB8888, 0);
     player->animCount++;
     SDL_FreeSurface(temp);
 }
@@ -174,8 +189,14 @@ void gameLoop(int playerNumber) {
 
         move(currentPlayer, (-moves.u + moves.d) * MOVE_SPEED, (-moves.l + moves.r) * MOVE_SPEED);
 
-        // clear screen
-        SDL_FillRect(window->surface, NULL, SDL_MapRGB(window->surface->format, 0, 0, 0));
+        // draw background
+        SDL_BlitSurface(window->bg_texture, NULL, window->surface, window->background);
+        if (window->background->y >= 100) {
+            window->background->y = 0;
+        } else {
+            window->background->y += SCROLLING_SPEED;
+        }
+        SDL_BlitSurface(window->bg_top_texture, NULL, window->surface, window->bg_top);
 
         // draw players
         SDL_SetRenderDrawColor(window->renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);

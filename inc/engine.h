@@ -8,12 +8,17 @@
 #define MOVE_SPEED              3
 #define PLAYER_ANIMATIONS       4
 #define ANIMATION_SLOWDOWN      8
+#define TOP_COVER_HEIGHT        150
+#define SCROLLING_SPEED         2
 
 // container for SDL stuff
 typedef struct windowData {
     SDL_Window      *window;
     SDL_Renderer    *renderer;
     SDL_Rect        *background;
+    SDL_Surface     *bg_texture;
+    SDL_Rect        *bg_top;
+    SDL_Surface     *bg_top_texture;
     SDL_Surface     *surface;
 } windowData;
 
