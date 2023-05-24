@@ -138,17 +138,17 @@ void gameLoop(int playerNumber) {
     state.players[0] = addPlayer(200, 400, 100, 200, &rectP1);
     state.players[1] = addPlayer(500, 400, 100, 600, &rectP2);
 
-    addPlayerAnimation(window, state.players[0], "res/player1_1.bmp");
-    addPlayerAnimation(window, state.players[1], "res/player2_1.bmp");
+    addPlayerAnimation(window, state.players[0], "res/jamniczek1_1.bmp");
+    addPlayerAnimation(window, state.players[1], "res/jamniczek2_1.bmp");
 
-    addPlayerAnimation(window, state.players[0], "res/player1_2.bmp");
-    addPlayerAnimation(window, state.players[1], "res/player2_2.bmp");
+    addPlayerAnimation(window, state.players[0], "res/jamniczek1_2.bmp");
+    addPlayerAnimation(window, state.players[1], "res/jamniczek2_2.bmp");
 
-    addPlayerAnimation(window, state.players[0], "res/player1_3.bmp");
-    addPlayerAnimation(window, state.players[1], "res/player2_3.bmp");
+    addPlayerAnimation(window, state.players[0], "res/jamniczek1_3.bmp");
+    addPlayerAnimation(window, state.players[1], "res/jamniczek2_3.bmp");
 
-    addPlayerAnimation(window, state.players[0], "res/player1_4.bmp");
-    addPlayerAnimation(window, state.players[1], "res/player2_4.bmp");
+    addPlayerAnimation(window, state.players[0], "res/jamniczek1_4.bmp");
+    addPlayerAnimation(window, state.players[1], "res/jamniczek2_4.bmp");
 
     currentPlayer = state.players[playerNumber];
     otherPlayer = state.players[!playerNumber];
@@ -191,10 +191,10 @@ void gameLoop(int playerNumber) {
 
         // draw background
         SDL_BlitSurface(window->bg_texture, NULL, window->surface, window->background);
-        if (window->background->y >= 100) {
-            window->background->y = 0;
+        if (window->background->y <= 0) {
+            window->background->y = 100;
         } else {
-            window->background->y += SCROLLING_SPEED;
+            window->background->y -= SCROLLING_SPEED;
         }
         SDL_BlitSurface(window->bg_top_texture, NULL, window->surface, window->bg_top);
 
