@@ -6,6 +6,8 @@
 #define DEFAULT_WINDOW_HEIGHT   600
 #define PLAYER_COUNT            2
 #define MOVE_SPEED              3
+#define PLAYER_ANIMATIONS       4
+#define ANIMATION_SLOWDOWN      8
 
 // container for SDL stuff
 typedef struct windowData {
@@ -19,7 +21,8 @@ typedef struct playerData {
     int         top, bottom;
     int         right, left;
     SDL_Rect    *image;
-    SDL_Surface *texture;
+    SDL_Surface **texture;
+    int         animCount;
 } playerData;
 
 typedef struct gameData {
@@ -40,10 +43,13 @@ windowData *createWindow();
 void gameLoop(int playerNumber);
 
 // init a player
-playerData *addPlayer(int t, int l, int b, int r, SDL_Rect *img, SDL_Surface *texture);
+playerData *addPlayer(int t, int l, int b, int r, SDL_Rect *img);
 
 // move a player
 void move(playerData *player, int du, int rl);
 
 // control the keys and set according data in moveData
 void keyControl(moveData *moves, SDL_Event event);
+
+// add surface from file to player structure
+void addPlayerAnimation(windowData *window, playerData *player, char *filename);

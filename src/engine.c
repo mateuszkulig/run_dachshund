@@ -24,7 +24,7 @@ windowData *createWindow() {
     return result;
 }
 
-playerData *addPlayer(int t, int l, int b, int r, SDL_Rect *img, SDL_Surface *texture) {
+playerData *addPlayer(int t, int l, int b, int r, SDL_Rect *img) {
     playerData *player = malloc(sizeof(playerData));
     player->top = t;
     player->bottom = b;
@@ -32,7 +32,7 @@ playerData *addPlayer(int t, int l, int b, int r, SDL_Rect *img, SDL_Surface *te
     player->left = l;
     player->image = img;
 
-    player->texture = texture;
+    player->texture = malloc(sizeof(SDL_Surface) * PLAYER_ANIMATIONS);
     
     return player;
 }
@@ -79,6 +79,14 @@ void keyControl(moveData *moves, SDL_Event event) {
     }
 }
 
+void addPlayerAnimation(windowData *window, playerData *player, char *filename) {
+    SDL_Surface *temp;
+    temp = SDL_LoadBMP(filename);
+    player->texture[player->animCount] = SDL_ConvertSurfaceFormat(temp, SDL_GetWindowPixelFormat(window->window), 0);
+    player->animCount++;
+    SDL_FreeSurface(temp);
+}
+
 void gameLoop(int playerNumber) {
     int         quit = 0;
     SDL_Event   event;
@@ -90,6 +98,7 @@ void gameLoop(int playerNumber) {
     moveData    moves;
     playerData  *currentPlayer = NULL;
     playerData  *otherPlayer = NULL;
+    int         currentAnim = 0;
 
 
     moves.d = 0;
@@ -111,17 +120,21 @@ void gameLoop(int playerNumber) {
     rectP2.w = 100;
     rectP2.h = 100;
 
-    surfP1 = SDL_LoadBMP("res/player1.bmp");
-    surfP2 = SDL_LoadBMP("res/player2.bmp");
+    state.players[0] = addPlayer(200, 400, 100, 200, &rectP1);
+    state.players[1] = addPlayer(500, 400, 100, 600, &rectP2);
 
-    textureP1 = SDL_ConvertSurfaceFormat(surfP1, SDL_GetWindowPixelFormat(window->window), 0);
-    textureP2 = SDL_ConvertSurfaceFormat(surfP2, SDL_GetWindowPixelFormat(window->window), 0);
+    addPlayerAnimation(window, state.players[0], "res/player1_1.bmp");
+    addPlayerAnimation(window, state.players[1], "res/player2_1.bmp");
 
-    SDL_FreeSurface(surfP1);
-    SDL_FreeSurface(surfP2);
+    addPlayerAnimation(window, state.players[0], "res/player1_2.bmp");
+    addPlayerAnimation(window, state.players[1], "res/player2_2.bmp");
 
-    state.players[0] = addPlayer(200, 400, 100, 200, &rectP1, textureP1);
-    state.players[1] = addPlayer(500, 400, 100, 600, &rectP2, textureP2);
+    addPlayerAnimation(window, state.players[0], "res/player1_3.bmp");
+    addPlayerAnimation(window, state.players[1], "res/player2_3.bmp");
+
+    addPlayerAnimation(window, state.players[0], "res/player1_4.bmp");
+    addPlayerAnimation(window, state.players[1], "res/player2_4.bmp");
+
     currentPlayer = state.players[playerNumber];
     otherPlayer = state.players[!playerNumber];
 
@@ -161,21 +174,17 @@ void gameLoop(int playerNumber) {
 
         move(currentPlayer, (-moves.u + moves.d) * MOVE_SPEED, (-moves.l + moves.r) * MOVE_SPEED);
 
-        // draw background
-        // SDL_SetRenderDrawColor(window->renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-        // SDL_RenderFillRect(window->renderer, window->background);
-
         // clear screen
         SDL_FillRect(window->surface, NULL, SDL_MapRGB(window->surface->format, 0, 0, 0));
 
         // draw players
         SDL_SetRenderDrawColor(window->renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
         for (size_t i=0; i<PLAYER_COUNT; ++i) {
-            SDL_BlitSurface(state.players[i]->texture, NULL, window->surface, state.players[i]->image);
-            // SDL_RenderDrawRect(window->renderer, state.players[i]->image);
+            SDL_BlitSurface(state.players[i]->texture[currentAnim/ANIMATION_SLOWDOWN], NULL, window->surface, state.players[i]->image);
         }
+        currentAnim++;
+        currentAnim == PLAYER_ANIMATIONS * ANIMATION_SLOWDOWN ? currentAnim = 0 : currentAnim;
 
-        // SDL_RenderPresent(window->renderer);
         SDL_UpdateWindowSurface(window->window);
     }
     
