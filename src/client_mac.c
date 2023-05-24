@@ -50,6 +50,7 @@ void sendData(platformSocket sock, const char *sendbuf) {
 char *recvData(platformSocket sock) {
     char *buffer = malloc(DEFAULT_BUFLEN);
     recv(sock.macSocket, buffer, DEFAULT_BUFLEN, 0);
+    return buffer;
 }
 
 void killSocket(platformSocket sock) {
