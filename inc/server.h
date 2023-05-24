@@ -5,8 +5,6 @@
     #define PORT 8080
 #endif
 
-#define DEFAULT_BUFLEN 512
-
 #pragma once
 #include "client.h"
 

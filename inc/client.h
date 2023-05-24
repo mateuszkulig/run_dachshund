@@ -9,7 +9,7 @@
 #define LOCALHOST   "127.0.0.1"
 
 #pragma once
-
+#define DEFAULT_BUFLEN 512
 
 typedef struct platformSocket {
     SOCKET  winSocket;

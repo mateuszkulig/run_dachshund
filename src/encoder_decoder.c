@@ -53,6 +53,7 @@ char *encode(playerData *player) {
 }
 
 void decode(playerData *player, char *code) {
+    printf("code: %s\n", code);
     char    bufferTop[4], bufferLeft[4], bufferBottom[4], bufferRight[4], bufferImgX[4], bufferImgY[4];
     bufferTop[3] = '\0';
     bufferLeft[3] = '\0';

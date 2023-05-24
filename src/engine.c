@@ -47,7 +47,8 @@ playerData *addPlayer(int t, int l, int b, int r, SDL_Rect *img) {
     player->left = l;
     player->image = img;
 
-    player->texture = malloc(sizeof(SDL_Surface) * PLAYER_ANIMATIONS);
+    player->texture = malloc(sizeof(SDL_Surface *) * PLAYER_ANIMATIONS);
+    player->animCount = 0;
     
     return player;
 }
@@ -95,7 +96,7 @@ void keyControl(moveData *moves, SDL_Event event) {
 }
 
 void addPlayerAnimation(windowData *window, playerData *player, char *filename) {
-    SDL_Surface *temp;
+    SDL_Surface *temp = NULL;
     temp = SDL_LoadBMP(filename);
     player->texture[player->animCount] = SDL_ConvertSurfaceFormat(temp, SDL_PIXELFORMAT_ARGB8888, 0);
     player->animCount++;

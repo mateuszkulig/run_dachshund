@@ -44,7 +44,12 @@ platformSocket clientInit() {
 }
 
 void sendData(platformSocket sock, const char *sendbuf) {
-    write(sock.macSocket, sendbuf, (int)strlen(sendbuf));
+    write(sock.macSocket, sendbuf, DEFAULT_BUFLEN);
+}
+
+char *recvData(platformSocket sock) {
+    char *buffer = malloc(DEFAULT_BUFLEN);
+    recv(sock.macSocket, buffer, DEFAULT_BUFLEN, 0);
 }
 
 void killSocket(platformSocket sock) {
