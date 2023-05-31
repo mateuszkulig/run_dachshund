@@ -64,7 +64,7 @@ void move(playerData *player, int du, int rl) {
     
 }
 
-void keyControl(moveData *moves, SDL_Event event) {
+void keyControl(moveData *moves, playerData *shot, playerData *player, int *nb, SDL_Event event) {
     // ifs instead of else if are intentional 
     if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_LEFT) {    
         moves->l = 1;
@@ -92,6 +92,18 @@ void keyControl(moveData *moves, SDL_Event event) {
     }
     if (event.type == SDL_KEYUP && event.key.keysym.scancode == SDL_SCANCODE_DOWN) {    
         moves->d = 0;
+    }
+
+    if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_SPACE) {
+        shot->top = player->top;
+        shot->left = player->left;
+        shot->bottom = player->bottom;
+        shot->right = player->right;
+
+        shot->image->x = player->image->x + 25; // +25 for being in the middle
+        shot->image->y = player->bottom;
+
+        *nb = 1;
     }
 }
 
@@ -182,7 +194,7 @@ void gameLoop(int playerNumber) {
                 quit = 1;
                 break;
             }
-            keyControl(&moves, event);
+            keyControl(&moves, state.shots[playerNumber], currentPlayer, &(state.shotStatus[playerNumber]), event);
         }
 
         // client-server communication
