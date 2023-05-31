@@ -42,7 +42,7 @@ add_custom_command(TARGET run_dachshund POST_BUILD
 # copy resources folder to build dir
 # taken from https://stackoverflow.com/questions/3702115/creating-a-directory-in-cmake
 add_custom_command(TARGET run_dachshund POST_BUILD
-                    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory
                     ${CMAKE_SOURCE_DIR}/res ${CMAKE_BINARY_DIR}/res/)
 
 # includes
