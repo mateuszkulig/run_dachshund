@@ -199,12 +199,12 @@ void gameLoop(int playerNumber) {
 
         // client-server communication
         if (socketCycle) {
-            socketBuffer = encode(currentPlayer);
+            socketBuffer = encode(currentPlayer, state.shots[playerNumber]);
             sendData(sock, socketBuffer);
             socketCycle = !socketCycle;
         } else {
             socketBuffer = recvData(sock);
-            decode(otherPlayer, socketBuffer);
+            decode(otherPlayer, state.shots[!playerNumber], socketBuffer);
             socketCycle = !socketCycle;
         }
 
