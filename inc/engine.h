@@ -32,6 +32,8 @@ typedef struct playerData {
 
 typedef struct gameData {
     playerData  *players[PLAYER_COUNT];
+    playerData  *shots[PLAYER_COUNT];
+    int         shotStatus[PLAYER_COUNT];
 } gameData;
 
 typedef struct moveData {

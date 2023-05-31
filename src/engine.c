@@ -122,22 +122,35 @@ void gameLoop(int playerNumber) {
     moves.r = 0;
     moves.l = 0;
 
-    SDL_Rect    rectP1, rectP2;
+    SDL_Rect    rectP1, rectP2, rectS1, rectS2;
     SDL_Surface *surfP1 = NULL, *surfP2 = NULL, *textureP1 = NULL, *textureP2 = NULL;
 
 
     rectP1.x = 200;
-    rectP1.y = 400;
+    rectP1.y = 100;
     rectP1.w = 100;
     rectP1.h = 100;
 
     rectP2.x = 500;
-    rectP2.y = 400;
+    rectP2.y = 100;
     rectP2.w = 100;
     rectP2.h = 100;
 
-    state.players[0] = addPlayer(400, 200, 500, 300, &rectP1);
-    state.players[1] = addPlayer(500, 400, 500, 600, &rectP2);
+    rectS1.x = 1;
+    rectS1.y = 1;
+    rectS1.w = 50;
+    rectS1.h = 50;
+
+    rectS2.x = 1;
+    rectS2.y = 1;
+    rectS2.w = 50;
+    rectS2.h = 50;
+
+    state.players[0] = addPlayer(100, 200, 200, 300, &rectP1);
+    state.players[1] = addPlayer(100, 400, 200, 600, &rectP2);
+
+    state.shots[0] = addPlayer(1, 1, 51, 51, &rectS1);
+    state.shots[1] = addPlayer(1, 1, 51, 51, &rectS2);
 
     addPlayerAnimation(window, state.players[0], "res/jamniczek1_1.bmp");
     addPlayerAnimation(window, state.players[1], "res/jamniczek2_1.bmp");
@@ -150,6 +163,9 @@ void gameLoop(int playerNumber) {
 
     addPlayerAnimation(window, state.players[0], "res/jamniczek1_4.bmp");
     addPlayerAnimation(window, state.players[1], "res/jamniczek2_4.bmp");
+
+    addPlayerAnimation(window, state.shots[0], "res/shot.bmp");
+    addPlayerAnimation(window, state.shots[1], "res/shot.bmp");
 
     currentPlayer = state.players[playerNumber];
     otherPlayer = state.players[!playerNumber];
@@ -200,12 +216,16 @@ void gameLoop(int playerNumber) {
         SDL_BlitSurface(window->bg_top_texture, NULL, window->surface, window->bg_top);
 
         // draw players
-        SDL_SetRenderDrawColor(window->renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
         for (size_t i=0; i<PLAYER_COUNT; ++i) {
             SDL_BlitSurface(state.players[i]->texture[currentAnim/ANIMATION_SLOWDOWN], NULL, window->surface, state.players[i]->image);
         }
         currentAnim++;
         currentAnim == PLAYER_ANIMATIONS * ANIMATION_SLOWDOWN ? currentAnim = 0 : currentAnim;
+
+        // draw or not draw shots
+        for (size_t i=0; i<PLAYER_COUNT; ++i) {
+            SDL_BlitSurface(state.shots[i]->texture[0], NULL, window->surface, state.shots[i]->image);
+        }
 
         SDL_UpdateWindowSurface(window->window);
     }
