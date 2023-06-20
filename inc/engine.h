@@ -10,6 +10,7 @@
 #define ANIMATION_SLOWDOWN      8
 #define TOP_COVER_HEIGHT        150
 #define SCROLLING_SPEED         2
+#define SHOT_SPEED              4
 
 // container for SDL stuff
 typedef struct windowData {
@@ -54,6 +55,9 @@ playerData *addPlayer(int t, int l, int b, int r, SDL_Rect *img);
 
 // move a player
 void move(playerData *player, int du, int rl);
+
+// move a shot
+void shotControl(playerData *shot);
 
 // control the keys and set according data in moveData
 void keyControl(moveData *moves, playerData *shot, playerData *player, int *nb, SDL_Event event);

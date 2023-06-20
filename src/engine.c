@@ -61,7 +61,12 @@ void move(playerData *player, int du, int rl) {
 
     player->image->x += rl;
     player->image->y += du;
-    
+}
+
+void shotControl(playerData *shot) {
+    shot->bottom += SHOT_SPEED;
+    shot->top += SHOT_SPEED;
+    shot->image->y += SHOT_SPEED;
 }
 
 void keyControl(moveData *moves, playerData *shot, playerData *player, int *nb, SDL_Event event) {
@@ -217,6 +222,7 @@ void gameLoop(int playerNumber) {
         }
 
         move(currentPlayer, (-moves.u + moves.d) * MOVE_SPEED, (-moves.l + moves.r) * MOVE_SPEED);
+        shotControl(state.shots[playerNumber]);
 
         // draw background
         SDL_BlitSurface(window->bg_texture, NULL, window->surface, window->background);
