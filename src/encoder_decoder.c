@@ -19,10 +19,11 @@ char *zeroFill(int number) {
     return result;
 }
 
-char *encode(playerData *player, playerData *shot) {
+char *encode(playerData *player, playerData *shot, int *shotStatus) {
     char    *result = calloc(DEFAULT_BUFLEN, 1);
     char    *bufferTop, *bufferLeft, *bufferBottom, *bufferRight, *bufferImgX, *bufferImgY,
-            *bufferShotTop, *bufferShotLeft, *bufferShotBottom, *bufferShotRight, *bufferShotImgX, *bufferShotImgY;
+            *bufferShotTop, *bufferShotLeft, *bufferShotBottom, *bufferShotRight, *bufferShotImgX, *bufferShotImgY,
+            *bufferShotStatus;
     
     bufferTop = zeroFill(player->top);
     bufferLeft = zeroFill(player->left);
@@ -38,6 +39,8 @@ char *encode(playerData *player, playerData *shot) {
     bufferShotImgX = zeroFill(shot->image->x);
     bufferShotImgY = zeroFill(shot->image->y);
 
+    bufferShotStatus = zeroFill(*shotStatus);
+
     for(size_t i=0; i<3; ++i) {
         result[i] = bufferTop[i];
         result[i+3] = bufferLeft[i];
@@ -52,9 +55,10 @@ char *encode(playerData *player, playerData *shot) {
         result[i+27] = bufferShotRight[i];
         result[i+30] = bufferShotImgX[i];
         result[i+33] = bufferShotImgY[i];
+        result[i+36] = bufferShotStatus[i];
     }
 
-    result[36] = '\0';
+    result[39] = '\0';
 
     free(bufferTop);
     free(bufferLeft);
@@ -70,12 +74,15 @@ char *encode(playerData *player, playerData *shot) {
     free(bufferShotImgX);
     free(bufferShotImgY);
 
+    free(bufferShotStatus);
+
     return result;
 }
 
-void decode(playerData *player, playerData *shot, char *code) {
+void decode(playerData *player, playerData *shot, char *code, int *shotStatus) {
     char    bufferTop[4], bufferLeft[4], bufferBottom[4], bufferRight[4], bufferImgX[4], bufferImgY[4],
-            bufferShotTop[4], bufferShotLeft[4], bufferShotBottom[4], bufferShotRight[4], bufferShotImgX[4], bufferShotImgY[4];
+            bufferShotTop[4], bufferShotLeft[4], bufferShotBottom[4], bufferShotRight[4], bufferShotImgX[4], bufferShotImgY[4],
+            bufferShotStatus[4];
         
     bufferTop[3] = '\0';
     bufferLeft[3] = '\0';
@@ -91,6 +98,8 @@ void decode(playerData *player, playerData *shot, char *code) {
     bufferShotImgX[3] = '\0';
     bufferShotImgY[3] = '\0';
 
+    bufferShotStatus[3] = '\0';
+
     for(size_t i=0; i<3; ++i) {
         bufferTop[i] = code[i];
         bufferLeft[i] = code[i+3];
@@ -105,6 +114,8 @@ void decode(playerData *player, playerData *shot, char *code) {
         bufferShotRight[i] = code[i+27];
         bufferShotImgX[i] = code[i+30];
         bufferShotImgY[i] = code[i+33];
+
+        bufferShotStatus[i] = code[i+36];
     }
 
     player->top = atoi(bufferTop);
@@ -120,6 +131,8 @@ void decode(playerData *player, playerData *shot, char *code) {
     shot->right = atoi(bufferShotRight);
     shot->image->x = atoi(bufferShotImgX);
     shot->image->y = atoi(bufferShotImgY);
+
+    *shotStatus = atoi(bufferShotStatus);
 
     free(code);
 }

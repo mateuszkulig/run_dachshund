@@ -133,10 +133,12 @@ void gameLoop(int playerNumber) {
 
     windowData  *window = createWindow();
     gameData    state = {0};
-    moveData    moves = {0};
+    moveData    moves;
     playerData  *currentPlayer = NULL;
     playerData  *otherPlayer = NULL;
     int         currentAnim = 0;
+
+    // set inital shots to non existent
 
 
     moves.d = 0;
@@ -209,12 +211,12 @@ void gameLoop(int playerNumber) {
 
         // client-server communication
         if (socketCycle) {
-            socketBuffer = encode(currentPlayer, state.shots[playerNumber]);
+            socketBuffer = encode(currentPlayer, state.shots[playerNumber], &(state.shotStatus[playerNumber]));
             sendData(sock, socketBuffer);
             socketCycle = !socketCycle;
         } else {
             socketBuffer = recvData(sock);
-            decode(otherPlayer, state.shots[!playerNumber], socketBuffer);
+            decode(otherPlayer, state.shots[!playerNumber], socketBuffer, &(state.shotStatus[!playerNumber]));
             socketCycle = !socketCycle;
         }
 
@@ -227,6 +229,7 @@ void gameLoop(int playerNumber) {
         }
 
         move(currentPlayer, (-moves.u + moves.d) * MOVE_SPEED, (-moves.l + moves.r) * MOVE_SPEED);
+        
         if (state.shotStatus[playerNumber]) {
             shotControl(state.shots[playerNumber], &state.shotStatus[playerNumber]);
         }
@@ -250,7 +253,7 @@ void gameLoop(int playerNumber) {
 
         // draw or not draw shots
         for (size_t i=0; i<PLAYER_COUNT; ++i) {
-            if (state.shotStatus[playerNumber]) {
+            if (state.shotStatus[i]) {
                 SDL_BlitSurface(state.shots[i]->texture[0], NULL, window->surface, state.shots[i]->image);
             }
             
