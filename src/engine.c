@@ -63,13 +63,18 @@ void move(playerData *player, int du, int rl) {
     player->image->y += du;
 }
 
-void shotControl(playerData *shot) {
+void shotControl(playerData *shot, int *shotStatus) {
+    if (shot->top >= DEFAULT_WINDOW_HEIGHT) {
+        *shotStatus = 0;
+        return;
+    }
+
     shot->bottom += SHOT_SPEED;
     shot->top += SHOT_SPEED;
     shot->image->y += SHOT_SPEED;
 }
 
-void keyControl(moveData *moves, playerData *shot, playerData *player, int *nb, SDL_Event event) {
+void keyControl(moveData *moves, playerData *shot, playerData *player, int *shotStatus, SDL_Event event) {
     // ifs instead of else if are intentional 
     if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_LEFT) {    
         moves->l = 1;
@@ -99,7 +104,7 @@ void keyControl(moveData *moves, playerData *shot, playerData *player, int *nb, 
         moves->d = 0;
     }
 
-    if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_SPACE) {
+    if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_SPACE && !(*shotStatus)) {
         shot->top = player->top;
         shot->left = player->left;
         shot->bottom = player->bottom;
@@ -108,7 +113,7 @@ void keyControl(moveData *moves, playerData *shot, playerData *player, int *nb, 
         shot->image->x = player->image->x + 25; // +25 for being in the middle
         shot->image->y = player->bottom;
 
-        *nb = 1;
+        *shotStatus = 1;
     }
 }
 
@@ -127,8 +132,8 @@ void gameLoop(int playerNumber) {
     unsigned int currentTicks = SDL_GetTicks();
 
     windowData  *window = createWindow();
-    gameData    state;
-    moveData    moves;
+    gameData    state = {0};
+    moveData    moves = {0};
     playerData  *currentPlayer = NULL;
     playerData  *otherPlayer = NULL;
     int         currentAnim = 0;
@@ -222,7 +227,10 @@ void gameLoop(int playerNumber) {
         }
 
         move(currentPlayer, (-moves.u + moves.d) * MOVE_SPEED, (-moves.l + moves.r) * MOVE_SPEED);
-        shotControl(state.shots[playerNumber]);
+        if (state.shotStatus[playerNumber]) {
+            shotControl(state.shots[playerNumber], &state.shotStatus[playerNumber]);
+        }
+        
 
         // draw background
         SDL_BlitSurface(window->bg_texture, NULL, window->surface, window->background);
@@ -242,7 +250,10 @@ void gameLoop(int playerNumber) {
 
         // draw or not draw shots
         for (size_t i=0; i<PLAYER_COUNT; ++i) {
-            SDL_BlitSurface(state.shots[i]->texture[0], NULL, window->surface, state.shots[i]->image);
+            if (state.shotStatus[playerNumber]) {
+                SDL_BlitSurface(state.shots[i]->texture[0], NULL, window->surface, state.shots[i]->image);
+            }
+            
         }
 
         SDL_UpdateWindowSurface(window->window);

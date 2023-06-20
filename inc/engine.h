@@ -57,10 +57,10 @@ playerData *addPlayer(int t, int l, int b, int r, SDL_Rect *img);
 void move(playerData *player, int du, int rl);
 
 // move a shot
-void shotControl(playerData *shot);
+void shotControl(playerData *shot, int *shotStatus);
 
 // control the keys and set according data in moveData
-void keyControl(moveData *moves, playerData *shot, playerData *player, int *nb, SDL_Event event);
+void keyControl(moveData *moves, playerData *shot, playerData *player, int *shotStatus, SDL_Event event);
 
 // add surface from file to player structure
 void addPlayerAnimation(windowData *window, playerData *player, char *filename);
