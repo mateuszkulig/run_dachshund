@@ -323,9 +323,10 @@ void gameLoop(int playerNumber) {
     killSocket(sock);
 
     printf("\n|-----------|\n");
-    printf("\n| GAME OVER |\n");
-    printf("\n|-----------|\n\n");
-    printf("Thanks for playing RunDachshund!");
-    printf("Created by Mateusz Kulig & Natalia Slawska");
+    printf("| GAME OVER |\n");
+    printf("|-----------|\n\n");
+    printf("Thanks for playing RunDachshund!\n");
+    printf("Created by Mateusz Kulig & Natalia Slawska\n");
+    printf("21.06.2023\n");
     
 }
