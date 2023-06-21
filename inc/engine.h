@@ -13,7 +13,7 @@
 #define TOP_COVER_HEIGHT        150
 #define SCROLLING_SPEED         2
 #define SHOT_SPEED              4
-#define TREE_SPEED              5
+#define TREE_SPEED              4
 
 // container for SDL stuff
 typedef struct windowData {
