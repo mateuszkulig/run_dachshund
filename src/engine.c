@@ -136,10 +136,7 @@ void handleCollision(playerData **players, playerData **shots, playerData *tree,
     static int count = 0;
 
     for (size_t i=0; i<PLAYER_COUNT; ++i) {
-        if (
-            shotStatus[i] &&
-            (tree->top < shots[i]->bottom && shots[i]->right > tree->left && shots[i]->left < tree->right)
-            ) {
+        if (shotStatus[i] &&(tree->top < shots[i]->bottom && shots[i]->right > tree->left && shots[i]->left < tree->right)) {
                 
             count++;
             printf("collision %d\n", count);
@@ -276,11 +273,15 @@ void gameLoop(int playerNumber) {
             shotControl(state.shots[playerNumber], &state.shotStatus[playerNumber]);
         }
 
+
+        
         // only one player controls the tree
         if (playerNumber) {
             treeControl(state.tree);
             handleCollision(state.players, state.shots, state.tree, state.shotStatus);
-        }
+        } 
+        printf("shot status: %d, %d\n", state.shotStatus[0], state.shotStatus[1]);
+        
 
         // draw background
         SDL_BlitSurface(window->bg_texture, NULL, window->surface, window->background);
