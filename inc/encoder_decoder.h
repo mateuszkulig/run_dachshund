@@ -10,4 +10,4 @@ char *zeroFill(int number);
 char *encode(playerData *player, playerData *shot, playerData *tree, int *shotsStatus);
 
 // set up player with decoded data
-void decode(playerData *player, playerData *shot, playerData *tree, char *code, int *shotStatus);
+void decode(playerData *player, playerData *shot, playerData *tree, char *code, int *shotStatus, int playerNumber);

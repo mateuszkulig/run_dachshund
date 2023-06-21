@@ -266,7 +266,7 @@ void gameLoop(int playerNumber) {
             socketCycle = !socketCycle;
         } else {
             socketBuffer = recvData(sock);
-            decode(otherPlayer, state.shots[!playerNumber], state.tree, socketBuffer, &(state.shotStatus[!playerNumber]));
+            decode(otherPlayer, state.shots[!playerNumber], state.tree, socketBuffer, &(state.shotStatus[!playerNumber]), playerNumber);
             socketCycle = !socketCycle;
         }
 
