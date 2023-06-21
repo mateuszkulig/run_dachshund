@@ -187,18 +187,18 @@ void gameLoop(int playerNumber) {
     rectS2.w = 50;
     rectS2.h = 50;
 
-    rectT1.x = 1;
-    rectT1.y = 1;
+    rectT1.x = (DEFAULT_WINDOW_WIDTH / 2) - 25;
+    rectT1.y = DEFAULT_WINDOW_HEIGHT - 50;
     rectT1.w = 50;
     rectT1.h = 50;
 
     state.players[0] = addPlayer(100, 200, 200, 300, &rectP1);
-    state.players[1] = addPlayer(100, 400, 200, 600, &rectP2);
+    state.players[1] = addPlayer(100, 500, 200, 600, &rectP2);
 
     state.shots[0] = addPlayer(1, 1, 51, 51, &rectS1);
     state.shots[1] = addPlayer(1, 1, 51, 51, &rectS2);
 
-    state.tree = addPlayer(1, 1, 50, 50, &rectT1);
+    state.tree = addPlayer(DEFAULT_WINDOW_HEIGHT - 60, (DEFAULT_WINDOW_WIDTH / 2) - 25, DEFAULT_WINDOW_HEIGHT - 10, (DEFAULT_WINDOW_WIDTH / 2) + 25, &rectT1);
 
     addPlayerAnimation(window, state.players[0], "res/jamniczek1_1.bmp");
     addPlayerAnimation(window, state.players[1], "res/jamniczek2_1.bmp");
@@ -235,17 +235,6 @@ void gameLoop(int playerNumber) {
             keyControl(&moves, state.shots[playerNumber], currentPlayer, &(state.shotStatus[playerNumber]), event);
         }
 
-        // client-server communication
-        if (socketCycle) {
-            socketBuffer = encode(currentPlayer, state.shots[playerNumber], &(state.shotStatus[playerNumber]));
-            sendData(sock, socketBuffer);
-            socketCycle = !socketCycle;
-        } else {
-            socketBuffer = recvData(sock);
-            decode(otherPlayer, state.shots[!playerNumber], socketBuffer, &(state.shotStatus[!playerNumber]));
-            socketCycle = !socketCycle;
-        }
-
         // framerate limit
         currentTicks = SDL_GetTicks();
         if (currentTicks - lastTicks > 1000/60) {
@@ -254,16 +243,27 @@ void gameLoop(int playerNumber) {
             continue;
         }
 
+        // client-server communication
+        if (socketCycle) {
+            socketBuffer = encode(currentPlayer, state.shots[playerNumber], state.tree, &(state.shotStatus[playerNumber]));
+            sendData(sock, socketBuffer);
+            socketCycle = !socketCycle;
+        } else {
+            socketBuffer = recvData(sock);
+            decode(otherPlayer, state.shots[!playerNumber], state.tree, socketBuffer, &(state.shotStatus[!playerNumber]));
+            socketCycle = !socketCycle;
+        }
+
         move(currentPlayer, (-moves.u + moves.d) * MOVE_SPEED, (-moves.l + moves.r) * MOVE_SPEED);
         
         if (state.shotStatus[playerNumber]) {
             shotControl(state.shots[playerNumber], &state.shotStatus[playerNumber]);
         }
 
-        // only one player controls the tree
-        if (playerNumber) {
+        // only first player (nr 0) controls the tree
+        // if (playerNumber) {
             treeControl(state.tree);
-        }
+        // }
 
         // draw background
         SDL_BlitSurface(window->bg_texture, NULL, window->surface, window->background);
