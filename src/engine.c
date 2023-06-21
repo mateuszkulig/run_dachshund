@@ -280,7 +280,6 @@ void gameLoop(int playerNumber) {
             treeControl(state.tree);
             handleCollision(state.players, state.shots, state.tree, state.shotStatus);
         } 
-        printf("shot status: %d, %d\n", state.shotStatus[0], state.shotStatus[1]);
         
 
         // draw background
