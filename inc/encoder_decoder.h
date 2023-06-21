@@ -7,7 +7,7 @@
 char *zeroFill(int number);
 
 // encode player data into string
-char *encode(playerData *player, playerData *shot, playerData *tree, int *shotsStatus);
+char *encode(playerData *player, playerData *shot, playerData *tree, int *shotsStatus, int playerNumber);
 
 // set up player with decoded data
 void decode(playerData *player, playerData *shot, playerData *tree, char *code, int *shotStatus, int playerNumber);
