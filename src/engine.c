@@ -126,21 +126,37 @@ void addPlayerAnimation(windowData *window, playerData *player, char *filename) 
 }
 
 void treeControl(playerData *tree) {
-    int x;
-    if (tree->top <= 0) {
-        x = (rand() % (DEFAULT_WINDOW_WIDTH - 50 - 50 + 1)) + 50;  // set new random X; 50 is for lower bound as well -50 for upper one
-        tree->left = x;
-        tree->right = x + 50;
-        tree->image->x = x;
-
-        tree->image->y = DEFAULT_WINDOW_HEIGHT - 50;
-        tree->bottom = DEFAULT_WINDOW_HEIGHT;
-        tree->top = DEFAULT_WINDOW_HEIGHT - 50;
-    } 
-
     tree->bottom -= TREE_SPEED;
     tree->top -= TREE_SPEED;
     tree->image->y -= TREE_SPEED;
+}
+
+void handleCollision(playerData **players, playerData **shots, playerData *tree, int *shotStatus) {
+    int x;
+    static int count = 0;
+
+    for (size_t i=0; i<PLAYER_COUNT; ++i) {
+        if (
+            shotStatus[i] &&
+            (tree->top < shots[i]->bottom && shots[i]->right > tree->left && shots[i]->left < tree->right)
+            ) {
+                
+            count++;
+            printf("collision %d\n", count);
+            
+            shotStatus[i] = !shotStatus[i];
+
+            x = (rand() % (DEFAULT_WINDOW_WIDTH - 50 - 50 + 1)) + 50;  // set new random X; 50 is for lower bound as well -50 for upper one
+            tree->left = x;
+            tree->right = x + 50;
+            tree->image->x = x;
+
+            tree->image->y = DEFAULT_WINDOW_HEIGHT - 50;
+            tree->bottom = DEFAULT_WINDOW_HEIGHT;
+            tree->top = DEFAULT_WINDOW_HEIGHT - 50;
+    }
+    }
+    
 }
 
 void gameLoop(int playerNumber) {
@@ -263,6 +279,7 @@ void gameLoop(int playerNumber) {
         // only one player controls the tree
         if (playerNumber) {
             treeControl(state.tree);
+            handleCollision(state.players, state.shots, state.tree, state.shotStatus);
         }
 
         // draw background
