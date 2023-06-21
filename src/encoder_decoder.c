@@ -155,12 +155,12 @@ void decode(playerData *player, playerData *shot, playerData *tree, char *code, 
 
         bufferShotStatus[i] = code[i+36];
 
-        bufferShotTop[i] = code[i+39];
-        bufferShotLeft[i] = code[i+42];
-        bufferShotBottom[i] = code[i+45];
-        bufferShotRight[i] = code[i+48];
-        bufferShotImgX[i] = code[i+51];
-        bufferShotImgY[i] = code[i+54];
+        bufferTreeTop[i] = code[i+39];
+        bufferTreeLeft[i] = code[i+42];
+        bufferTreeBottom[i] = code[i+45];
+        bufferTreeRight[i] = code[i+48];
+        bufferTreeImgX[i] = code[i+51];
+        bufferTreeImgY[i] = code[i+54];
     }
 
     player->top = atoi(bufferTop);
@@ -179,15 +179,12 @@ void decode(playerData *player, playerData *shot, playerData *tree, char *code, 
 
     *shotStatus = atoi(bufferShotStatus);
 
-    if (playerNumber == 1) {
-        tree->top = atoi(bufferTreeTop);
-        tree->left = atoi(bufferTreeLeft);
-        tree->bottom = atoi(bufferTreeBottom);
-        tree->right = atoi(bufferTreeRight);
-        tree->image->x = atoi(bufferTreeImgX);
-        tree->image->y = atoi(bufferTreeImgY);
-    }
-    
+    tree->top = atoi(bufferTreeTop);
+    tree->left = atoi(bufferTreeLeft);
+    tree->bottom = atoi(bufferTreeBottom);
+    tree->right = atoi(bufferTreeRight);
+    tree->image->x = atoi(bufferTreeImgX);
+    tree->image->y = atoi(bufferTreeImgY);
 
     free(code);
 }
