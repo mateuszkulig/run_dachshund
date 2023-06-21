@@ -125,6 +125,24 @@ void addPlayerAnimation(windowData *window, playerData *player, char *filename) 
     SDL_FreeSurface(temp);
 }
 
+void treeControl(playerData *tree) {
+    int x;
+    if (tree->top <= 0) {
+        x = (rand() % (DEFAULT_WINDOW_WIDTH - 50 - 50 + 1)) + 50;  // set new random X; 50 is for lower bound as well -50 for upper one
+        tree->left = x;
+        tree->right = x + 50;
+        tree->image->x = x;
+
+        tree->image->y = DEFAULT_WINDOW_HEIGHT - 50;
+        tree->bottom = DEFAULT_WINDOW_HEIGHT;
+        tree->top = DEFAULT_WINDOW_HEIGHT - 50;
+    } 
+
+    tree->bottom -= TREE_SPEED;
+    tree->top -= TREE_SPEED;
+    tree->image->y -= TREE_SPEED;
+}
+
 void gameLoop(int playerNumber) {
     int         quit = 0;
     SDL_Event   event;
@@ -138,15 +156,14 @@ void gameLoop(int playerNumber) {
     playerData  *otherPlayer = NULL;
     int         currentAnim = 0;
 
-    // set inital shots to non existent
-
+    srand(time(0));
 
     moves.d = 0;
     moves.u = 0;
     moves.r = 0;
     moves.l = 0;
 
-    SDL_Rect    rectP1, rectP2, rectS1, rectS2;
+    SDL_Rect    rectP1, rectP2, rectS1, rectS2, rectT1;
     SDL_Surface *surfP1 = NULL, *surfP2 = NULL, *textureP1 = NULL, *textureP2 = NULL;
 
 
@@ -170,11 +187,18 @@ void gameLoop(int playerNumber) {
     rectS2.w = 50;
     rectS2.h = 50;
 
+    rectT1.x = 1;
+    rectT1.y = 1;
+    rectT1.w = 50;
+    rectT1.h = 50;
+
     state.players[0] = addPlayer(100, 200, 200, 300, &rectP1);
     state.players[1] = addPlayer(100, 400, 200, 600, &rectP2);
 
     state.shots[0] = addPlayer(1, 1, 51, 51, &rectS1);
     state.shots[1] = addPlayer(1, 1, 51, 51, &rectS2);
+
+    state.tree = addPlayer(1, 1, 50, 50, &rectT1);
 
     addPlayerAnimation(window, state.players[0], "res/jamniczek1_1.bmp");
     addPlayerAnimation(window, state.players[1], "res/jamniczek2_1.bmp");
@@ -190,6 +214,8 @@ void gameLoop(int playerNumber) {
 
     addPlayerAnimation(window, state.shots[0], "res/shot.bmp");
     addPlayerAnimation(window, state.shots[1], "res/shot.bmp");
+
+    addPlayerAnimation(window, state.tree, "res/tree.bmp");
 
     currentPlayer = state.players[playerNumber];
     otherPlayer = state.players[!playerNumber];
@@ -233,7 +259,11 @@ void gameLoop(int playerNumber) {
         if (state.shotStatus[playerNumber]) {
             shotControl(state.shots[playerNumber], &state.shotStatus[playerNumber]);
         }
-        
+
+        // only one player controls the tree
+        if (playerNumber) {
+            treeControl(state.tree);
+        }
 
         // draw background
         SDL_BlitSurface(window->bg_texture, NULL, window->surface, window->background);
@@ -256,8 +286,9 @@ void gameLoop(int playerNumber) {
             if (state.shotStatus[i]) {
                 SDL_BlitSurface(state.shots[i]->texture[0], NULL, window->surface, state.shots[i]->image);
             }
-            
         }
+
+        SDL_BlitSurface(state.tree->texture[0], NULL, window->surface, state.tree->image);
 
         SDL_UpdateWindowSurface(window->window);
     }

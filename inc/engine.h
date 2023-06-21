@@ -1,6 +1,8 @@
 #include "SDL.h"
 #include "client.h"
 #include "server.h"
+#include "time.h"
+
 #pragma once 
 #define DEFAULT_WINDOW_WIDTH    800
 #define DEFAULT_WINDOW_HEIGHT   600
@@ -11,6 +13,7 @@
 #define TOP_COVER_HEIGHT        150
 #define SCROLLING_SPEED         2
 #define SHOT_SPEED              4
+#define TREE_SPEED              4
 
 // container for SDL stuff
 typedef struct windowData {
@@ -34,6 +37,7 @@ typedef struct playerData {
 typedef struct gameData {
     playerData  *players[PLAYER_COUNT];
     playerData  *shots[PLAYER_COUNT];
+    playerData  *tree;
     int         shotStatus[PLAYER_COUNT];
 } gameData;
 
@@ -61,6 +65,9 @@ void shotControl(playerData *shot, int *shotStatus);
 
 // control the keys and set according data in moveData
 void keyControl(moveData *moves, playerData *shot, playerData *player, int *shotStatus, SDL_Event event);
+
+// move the tree
+void treeControl(playerData *tree);
 
 // add surface from file to player structure
 void addPlayerAnimation(windowData *window, playerData *player, char *filename);
