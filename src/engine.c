@@ -74,7 +74,7 @@ void shotControl(playerData *shot, int *shotStatus) {
     shot->image->y += SHOT_SPEED;
 }
 
-void keyControl(moveData *moves, playerData *shot, playerData *player, int *shotStatus, SDL_Event event) {
+void keyControl(moveData *moves, playerData *shot, playerData *player, int *shotStatus, SDL_Event event, int *spaceOverload) {
     // ifs instead of else if are intentional 
     if (event.type == SDL_KEYDOWN && event.key.keysym.scancode == SDL_SCANCODE_LEFT) {    
         moves->l = 1;
@@ -114,6 +114,8 @@ void keyControl(moveData *moves, playerData *shot, playerData *player, int *shot
         shot->image->y = player->bottom;
 
         *shotStatus = 1;
+
+        *spaceOverload = 2;
     }
 }
 
@@ -132,11 +134,11 @@ void treeControl(playerData *tree) {
 }
 
 void handleCollision(playerData **players, playerData **shots, playerData *tree, int *shotStatus) {
-    int x;
-    static int count = 0;
+    int         x;
+    static int  count = 0;
 
     for (size_t i=0; i<PLAYER_COUNT; ++i) {
-        if (shotStatus[i] &&(tree->top < shots[i]->bottom && shots[i]->right > tree->left && shots[i]->left < tree->right)) {
+        if (shotStatus[i] && (tree->top < shots[i]->bottom && tree->bottom > shots[i]->top && shots[i]->right > tree->left && shots[i]->left < tree->right)) {
                 
             count++;
             printf("collision %d\n", count);
@@ -168,6 +170,7 @@ void gameLoop(int playerNumber) {
     playerData  *currentPlayer = NULL;
     playerData  *otherPlayer = NULL;
     int         currentAnim = 0;
+    int         spaceOverload = 0;
 
     srand(time(0));
 
@@ -239,21 +242,27 @@ void gameLoop(int playerNumber) {
     char *socketBuffer = NULL;
 
     while (!quit) {
-        // events
-        while(SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) {
-                quit = 1;
-                break;
-            }
-            keyControl(&moves, state.shots[playerNumber], currentPlayer, &(state.shotStatus[playerNumber]), event);
-        }
-
         // framerate limit
         currentTicks = SDL_GetTicks();
         if (currentTicks - lastTicks > 1000/60) {
             lastTicks = currentTicks;
         } else {
             continue;
+        }
+
+        // events
+        while(SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) {
+                quit = 1;
+                break;
+            }
+            keyControl(&moves, state.shots[playerNumber], currentPlayer, &(state.shotStatus[playerNumber]), event, &spaceOverload);
+        }
+
+        // this is a mechanism designed to fix the not-registering space click issue on odd frames when app is listeing for data
+        if (spaceOverload) {
+            state.shotStatus[playerNumber] = 1;
+            spaceOverload--;
         }
 
         // client-server communication

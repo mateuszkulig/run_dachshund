@@ -64,7 +64,7 @@ void move(playerData *player, int du, int rl);
 void shotControl(playerData *shot, int *shotStatus);
 
 // control the keys and set according data in moveData
-void keyControl(moveData *moves, playerData *shot, playerData *player, int *shotStatus, SDL_Event event);
+void keyControl(moveData *moves, playerData *shot, playerData *player, int *shotStatus, SDL_Event event, int *overload);
 
 // move the tree
 void treeControl(playerData *tree);
