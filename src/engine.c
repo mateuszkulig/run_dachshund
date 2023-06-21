@@ -133,7 +133,7 @@ void treeControl(playerData *tree) {
     tree->image->y -= TREE_SPEED;
 }
 
-int handleCollision(playerData **players, playerData **shots, playerData *tree, int *shotStatus) {
+void handleCollision(playerData **players, playerData **shots, playerData *tree, int *shotStatus) {
     int x;
 
     for (size_t i=0; i<PLAYER_COUNT; ++i) {
@@ -151,7 +151,9 @@ int handleCollision(playerData **players, playerData **shots, playerData *tree, 
             tree->top = DEFAULT_WINDOW_HEIGHT - 50;
         }
     }
+}
 
+int loseCheck(playerData *tree) {
     if (tree->top <= 0) {
         return 1;
     }
@@ -277,21 +279,20 @@ void gameLoop(int playerNumber) {
             socketCycle = !socketCycle;
         }
 
+        quit = loseCheck(state.tree);
+
         move(currentPlayer, (-moves.u + moves.d) * MOVE_SPEED, (-moves.l + moves.r) * MOVE_SPEED);
         
         if (state.shotStatus[playerNumber]) {
             shotControl(state.shots[playerNumber], &state.shotStatus[playerNumber]);
         }
-
-
         
         // only one player controls the tree
         if (playerNumber) {
             treeControl(state.tree);
-            quit = handleCollision(state.players, state.shots, state.tree, state.shotStatus);
+            handleCollision(state.players, state.shots, state.tree, state.shotStatus);
         } 
         
-
         // draw background
         SDL_BlitSurface(window->bg_texture, NULL, window->surface, window->background);
         if (window->background->y <= 0) {
@@ -323,9 +324,9 @@ void gameLoop(int playerNumber) {
     killSocket(sock);
 
     printf("\n|-----------|\n");
-    printf("\n| GAME OVER |\n");
-    printf("\n|-----------|\n\n");
-    printf("Thanks for playing RunDachshund!");
+    printf("| GAME OVER |\n");
+    printf("|-----------|\n\n");
+    printf("Thanks for playing RunDachshund!\n");
     printf("Created by Mateusz Kulig & Natalia Slawska");
     
 }
