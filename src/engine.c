@@ -135,13 +135,9 @@ void treeControl(playerData *tree) {
 
 void handleCollision(playerData **players, playerData **shots, playerData *tree, int *shotStatus) {
     int         x;
-    static int  count = 0;
 
     for (size_t i=0; i<PLAYER_COUNT; ++i) {
         if (shotStatus[i] && (tree->top < shots[i]->bottom && tree->bottom > shots[i]->top && shots[i]->right > tree->left && shots[i]->left < tree->right)) {
-                
-            count++;
-            printf("collision %d\n", count);
             
             shotStatus[i] = !shotStatus[i];
 
