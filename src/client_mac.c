@@ -21,8 +21,7 @@ platformSocket clientInit() {
     if (sockfd == -1) {
         printf("socket creation failed...\n");
         exit(0);
-    } else
-        printf("Socket successfully created..\n");
+    }
     bzero(&servaddr, sizeof(servaddr));
  
     // assign IP, PORT
@@ -36,8 +35,6 @@ platformSocket clientInit() {
         printf("connection with the server failed...\n");
         exit(0);
     }
-    else
-        printf("connected to the server..\n");
     
     sock.macSocket = sockfd;
     return sock;
@@ -55,10 +52,4 @@ char *recvData(platformSocket sock) {
 
 void killSocket(platformSocket sock) {
     close(sock.macSocket);
-}
-
-int run()
-{
-    // debug code
-    return 0;
 }
