@@ -118,6 +118,8 @@ void decode(playerData *player, playerData *shot, playerData *tree, char *code, 
             bufferShotTop[4], bufferShotLeft[4], bufferShotBottom[4], bufferShotRight[4], bufferShotImgX[4], bufferShotImgY[4],
             bufferShotStatus1[4], bufferShotStatus2[4],
             bufferTreeTop[4], bufferTreeLeft[4], bufferTreeBottom[4], bufferTreeRight[4], bufferTreeImgX[4], bufferTreeImgY[4];
+
+    static int doubleWait = 0;
         
     bufferTop[3] = '\0';
     bufferLeft[3] = '\0';
@@ -185,6 +187,7 @@ void decode(playerData *player, playerData *shot, playerData *tree, char *code, 
     shot->image->y = atoi(bufferShotImgY);
 
     shotStatus[!playerNumber] = atoi(bufferShotStatus1);
+    shotStatus[playerNumber] = atoi(bufferShotStatus2);
 
     // only the other player handles the collision so avoid reviving tree because of lag
     if (!playerNumber) {
@@ -193,8 +196,7 @@ void decode(playerData *player, playerData *shot, playerData *tree, char *code, 
         tree->bottom = atoi(bufferTreeBottom);
         tree->right = atoi(bufferTreeRight);
         tree->image->x = atoi(bufferTreeImgX);
-        tree->image->y = atoi(bufferTreeImgY);
-        shotStatus[playerNumber] = atoi(bufferShotStatus2);
+        tree->image->y = atoi(bufferTreeImgY);     
     }
     
 
