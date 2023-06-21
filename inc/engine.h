@@ -73,4 +73,4 @@ void treeControl(playerData *tree);
 void addPlayerAnimation(windowData *window, playerData *player, char *filename);
 
 // handle the collision between objects
-void handleCollision(playerData **players, playerData **shots, playerData *tree, int *shotStatus);
+int handleCollision(playerData **players, playerData **shots, playerData *tree, int *shotStatus);
