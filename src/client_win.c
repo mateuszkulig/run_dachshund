@@ -86,13 +86,9 @@ void sendData(platformSocket sock, const char *sendbuf) {
     int iResult;
     iResult = send( ConnectSocket, sendbuf, (int)strlen(sendbuf), 0 );
     if (iResult == SOCKET_ERROR) {
-        printf("send failed with error: %d\n", WSAGetLastError());
         closesocket(ConnectSocket);
         WSACleanup();
-        exit(1);
     }
-
-    // printf("Bytes Sent: %ld\n", iResult);
 }
 
 char *recvData(platformSocket sock) {
@@ -101,12 +97,6 @@ char *recvData(platformSocket sock) {
     char *recvbuf = calloc(DEFAULT_BUFLEN, 1);
 
     iResult = recv(ConnectSocket, recvbuf, DEFAULT_BUFLEN, 0);
-    if ( iResult > 0 ) {}
-        // printf("Bytes received: %d\n", iResult);
-    else if ( iResult == 0 )
-        printf("Connection closed\n");
-    else
-        printf("recv failed with error: %d\n", WSAGetLastError());
 
     return recvbuf;
 }
@@ -116,14 +106,7 @@ void killSocket(platformSocket sock) {
     int iResult;
     iResult = shutdown(ConnectSocket, SD_SEND);
     if (iResult == SOCKET_ERROR) {
-        printf("shutdown failed with error: %d\n", WSAGetLastError());
         closesocket(ConnectSocket);
         WSACleanup();
-        exit(1);
     }
-}
-
-int run() {
-    // debug code
-    return 0;
 }
