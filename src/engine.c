@@ -327,11 +327,7 @@ void gameLoop(int playerNumber) {
     printf("| GAME OVER |\n");
     printf("|-----------|\n\n");
     printf("Thanks for playing RunDachshund!\n");
-<<<<<<< HEAD
-    printf("Created by Mateusz Kulig & Natalia Slawska");
-=======
     printf("Created by Mateusz Kulig & Natalia Slawska\n");
     printf("21.06.2023\n");
->>>>>>> master
     
 }
